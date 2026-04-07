@@ -1,69 +1,100 @@
-<?php require_once __DIR__ . '/includes/header.php'; ?>
+<?php
+require_once __DIR__ . '/config.php';
 
-<h1>Nos Vêtements</h1>
+function retrieveProductById(PDO $pdo, $id): array {
+    $stmt = $pdo->prepare('SELECT * FROM produit WHERE id = :id');
+    $stmt->execute([':id' => $id]);
+    $produit = $stmt->fetch();
+    return $produit ?: [];
+}
 
-<div class="products-grid">
+$id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+$produit = retrieveProductById($pdo, $id);
 
-    <article class="product-card">
-        <img src="/assets/images/tshirt-noir.jpg" alt="T-shirt Noir Col Rond">
-        <div class="product-card-body">
-            <h2>T-shirt Noir Col Rond</h2>
-            <p>Coton bio 180g/m², coupe slim.</p>
-            <p class="price">24,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
+require_once __DIR__ . '/includes/header.php';
+?>
+
+<?php if (empty($produit)): ?>
+    <p>Produit introuvable.</p>
+
+<?php elseif ($produit['statut'] == 0): ?>
+    <p>Ce produit n'est pas disponible à la vente.</p>
+
+<?php else: ?>
+    <section class="product-detail">
+
+        <img
+            src="/assets/images/<?= htmlspecialchars($produit['image']) ?>"
+            alt="<?= htmlspecialchars($produit['nom']) ?>"
+        >
+
+        <div class="product-info">
+
+            <h1><?= htmlspecialchars($produit['nom']) ?></h1>
+
+            <p><?= htmlspecialchars($produit['description_courte']) ?></p>
+
+            <p><?= htmlspecialchars($produit['description_longue']) ?></p>
+
+            <p class="product-price">
+                Prix HTVA : <?= number_format($produit['prixhtva'], 2, ',', '.') ?> €
+            </p>
+            <p class="product-price">
+                Prix TVAC : <?= number_format($produit['prixhtva'] * TVA, 2, ',', '.') ?> €
+            </p>
+
+            <p class="product-stock">
+                En stock : <?= $produit['stock'] ?> unités
+            </p>
+
+            <?php if ($produit['stock'] > 0): ?>
+            <form id="add-to-cart-form">
+                <input type="hidden" name="id" value="<?= $produit['id'] ?>">
+                <div class="quantity-selector">
+                    <label for="quantity">Quantité :</label>
+                    <select name="quantity" id="quantity">
+                        <?php for ($i = 1; $i <= min(5, $produit['stock']); $i++): ?>
+                            <option value="<?= $i ?>"><?= $i ?></option>
+                        <?php endfor; ?>
+                    </select>
+                </div>
+                <button type="submit" class="add-to-cart-btn">
+                    🛒 Ajouter au panier
+                </button>
+            </form>
+
+            <div id="cart-message"></div>
+            <?php endif; ?>
+
         </div>
-    </article>
+    </section>
 
-    <article class="product-card">
-        <img src="/assets/images/jean-slim.jpg" alt="Jean Slim Bleu">
-        <div class="product-card-body">
-            <h2>Jean Slim Bleu</h2>
-            <p>Denim stretch, taille haute.</p>
-            <p class="price">59,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
-        </div>
-    </article>
+    <script>
+    document.getElementById('add-to-cart-form').addEventListener('submit', function(e) {
+        e.preventDefault();
 
-    <article class="product-card">
-        <img src="/assets/images/robe-ete.jpg" alt="Robe d'été Fleurie">
-        <div class="product-card-body">
-            <h2>Robe d'été Fleurie</h2>
-            <p>Viscose légère, motif floral.</p>
-            <p class="price">45,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
-        </div>
-    </article>
+        const id = this.querySelector('[name="id"]').value;
+        const quantity = this.querySelector('[name="quantity"]').value;
 
-    <article class="product-card">
-        <img src="/assets/images/pull-laine.jpg" alt="Pull en Laine Gris">
-        <div class="product-card-body">
-            <h2>Pull en Laine Gris</h2>
-            <p>Laine mérinos douce, col rond.</p>
-            <p class="price">89,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
-        </div>
-    </article>
+        fetch('/add_to_cart.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: id, quantity: quantity })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const msg = document.getElementById('cart-message');
+            if (data.success) {
+                msg.innerHTML = '✅ ' + data.message + ' <a href="/basket.php">Voir le panier</a>';
+                msg.style.color = 'green';
+            } else {
+                msg.innerHTML = '❌ ' + data.message;
+                msg.style.color = 'red';
+            }
+        });
+    });
+    </script>
 
-    <article class="product-card">
-        <img src="/assets/images/veste-cuir.jpg" alt="Veste en Cuir Noir">
-        <div class="product-card-body">
-            <h2>Veste en Cuir Noir</h2>
-            <p>Cuir véritable, doublure satin.</p>
-            <p class="price">249,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
-        </div>
-    </article>
-
-    <article class="product-card">
-        <img src="/assets/images/short-sport.jpg" alt="Short de Sport Bleu Marine">
-        <div class="product-card-body">
-            <h2>Short de Sport Bleu Marine</h2>
-            <p>Polyester recyclé, séchage rapide.</p>
-            <p class="price">29,00 € TVAC</p>
-            <a href="/product.php">Voir le produit</a>
-        </div>
-    </article>
-
-</div>
+<?php endif; ?>
 
 <?php require_once __DIR__ . '/includes/footer.php'; ?>
