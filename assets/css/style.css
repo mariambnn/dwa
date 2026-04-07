@@ -1,31 +1,361 @@
+/* v2 */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: Arial, sans-serif; color: #333; background: #f9f9f9; }
+body {
+    font-family: 'Raleway', sans-serif;
+    color: #2c2c2c;
+    background: #f8f5f0;
+}
 
-/* Navigation */
-nav { background: #1a1a2e; padding: 1rem 2rem; display: flex; gap: 2rem; }
-nav a { color: white; text-decoration: none; font-weight: bold; }
-nav a:hover { color: #e94560; }
+/* ── HEADER ── */
+header {
+    background: #f8f5f0;
+    border-bottom: 1px solid #e0d8cc;
+    padding: 1.5rem 3rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
 
-/* Contenu principal */
-main { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+}
 
-/* Footer */
-footer { background: #1a1a2e; color: #aaa; text-align: center; padding: 1rem; margin-top: 3rem; }
+.logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2c2c2c;
+    text-decoration: none;
+    letter-spacing: 3px;
+}
 
-/* Fiche produit */
-.product-detail { display: flex; gap: 3rem; align-items: flex-start; }
-.product-detail img { width: 400px; border-radius: 8px; }
-.product-info h1 { font-size: 2rem; margin-bottom: 1rem; }
-.product-price { font-size: 1.5rem; color: #e94560; font-weight: bold; margin: 1rem 0; }
-.product-stock { color: #28a745; margin-bottom: 1.5rem; }
+nav {
+    display: flex;
+    gap: 2.5rem;
+    align-items: center;
+}
 
-/* Liste produits */
-.products-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2rem; }
-.product-card { background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-.product-card img { width: 100%; height: 250px; object-fit: cover; }
-.product-card-body { padding: 1rem; }
-.product-card h2 { font-size: 1.1rem; margin-bottom: 0.5rem; }
-.product-card .price { color: #e94560; font-weight: bold; font-size: 1.2rem; }
-.product-card a { display: block; margin-top: 0.8rem; text-align: center;
-    background: #1a1a2e; color: white; padding: 0.5rem; border-radius: 4px; text-decoration: none; }
-.product-card a:hover { background: #e94560; }
+nav a {
+    color: #2c2c2c;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: color 0.2s;
+}
+
+nav a:hover { color: #9e8a72; }
+
+/* ── MAIN ── */
+main {
+    max-width: 1300px;
+    margin: 3rem auto;
+    padding: 0 3rem;
+}
+
+/* ── FOOTER ── */
+footer {
+    background: #2c2c2c;
+    color: #9e8a72;
+    text-align: center;
+    padding: 2rem;
+    margin-top: 5rem;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ── LISTE PRODUITS ── */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    margin-top: 2rem;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #e0d8cc;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+
+.product-card img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+
+.product-card-body { padding: 1.2rem; }
+
+.product-card h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+    color: #2c2c2c;
+}
+
+.product-card p {
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.8rem;
+}
+
+.product-card .price {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #2c2c2c;
+}
+
+.product-card a {
+    display: block;
+    margin-top: 1rem;
+    text-align: center;
+    background: #2c2c2c;
+    color: white;
+    padding: 0.7rem;
+    text-decoration: none;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background 0.2s;
+}
+
+.product-card a:hover { background: #9e8a72; }
+
+/* ── FILTRE ── */
+.filter-form {
+    background: white;
+    border: 1px solid #e0d8cc;
+    padding: 1.5rem 2rem;
+    margin-bottom: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+}
+
+.filter-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+
+.filter-categories strong,
+.filter-order strong {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-right: 0.5rem;
+}
+
+.filter-categories label,
+.filter-order label {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: #2c2c2c;
+}
+
+.filter-order {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.filter-btn {
+    background: #2c2c2c;
+    color: white;
+    border: none;
+    padding: 0.6rem 1.8rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: background 0.2s;
+}
+
+.filter-btn:hover { background: #9e8a72; }
+
+/* ── FICHE PRODUIT ── */
+.product-detail {
+    display: flex;
+    gap: 4rem;
+    align-items: flex-start;
+}
+
+.product-detail img {
+    width: 500px;
+    height: 600px;
+    object-fit: cover;
+}
+
+.product-info { flex: 1; }
+
+.product-info h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2rem;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+    color: #2c2c2c;
+}
+
+.product-info p {
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.product-price {
+    font-size: 1.2rem !important;
+    font-weight: 500 !important;
+    color: #2c2c2c !important;
+    margin: 0.3rem 0 !important;
+}
+
+.product-stock {
+    font-size: 0.85rem !important;
+    color: #9e8a72 !important;
+    letter-spacing: 1px;
+    margin: 1rem 0 !important;
+}
+
+/* ── AJOUT AU PANIER ── */
+.quantity-selector {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.quantity-selector label {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+}
+
+.quantity-selector select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e0d8cc;
+    background: white;
+    font-size: 1rem;
+    font-family: 'Raleway', sans-serif;
+}
+
+.add-to-cart-btn {
+    background: #2c2c2c;
+    color: white;
+    border: none;
+    padding: 1rem 3rem;
+    cursor: pointer;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-family: 'Raleway', sans-serif;
+    transition: background 0.2s;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.add-to-cart-btn:hover { background: #9e8a72; }
+
+#cart-message {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    padding: 0.8rem;
+    background: #f8f5f0;
+    border: 1px solid #e0d8cc;
+}
+
+#cart-message a {
+    color: #2c2c2c;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+/* ── PANIER ── */
+.basket { max-width: 900px; margin: 0 auto; }
+
+.basket-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    background: white;
+    border: 1px solid #e0d8cc;
+}
+
+.basket-table th {
+    background: #2c2c2c;
+    color: white;
+    padding: 1rem 1.5rem;
+    text-align: left;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    font-weight: 400;
+}
+
+.basket-table td {
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e0d8cc;
+    vertical-align: middle;
+    font-size: 0.95rem;
+}
+
+.basket-table tr:last-child td { border-bottom: none; }
+
+.basket-table td img {
+    width: 60px !important;
+    height: 60px !important;
+    object-fit: cover;
+    margin-right: 1rem;
+    vertical-align: middle;
+}
+
+.basket-totals {
+    background: white;
+    border: 1px solid #e0d8cc;
+    padding: 1.5rem 2rem;
+    text-align: right;
+}
+
+.basket-totals p {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #666;
+}
+
+.basket-totals p:last-child {
+    font-size: 1.2rem;
+    color: #2c2c2c;
+    font-weight: 600;
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid #e0d8cc;
+}
+
+/* ── TITRE PAGE ── */
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    color: #2c2c2c;
+    margin-bottom: 2rem;
+    letter-spacing: 1px;
+}
